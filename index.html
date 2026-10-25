@@ -1,0 +1,1158 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DANIELA & VALENTÍN</title>
+  <meta name="theme-color" content="#7b5b43" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --paper:#f6f0e8;
+      --paper-2:#efe6db;
+      --ink:#5f4938;
+      --accent:#87684f;
+      --line:#cdbba9;
+      --white:#fff;
+      --shadow:0 18px 50px rgba(69,48,32,.18);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      color:var(--ink);
+      background:#d9d0c6;
+      font-family:"Montserrat",system-ui,sans-serif;
+    }
+    img{display:block;max-width:100%}
+    button,a{font:inherit}
+    button{cursor:pointer}
+
+    .page{
+      width:min(100%, 520px);
+      margin:0 auto;
+      background:var(--paper);
+      min-height:100vh;
+      position:relative;
+      overflow:hidden;
+      box-shadow:0 0 60px rgba(0,0,0,.15);
+    }
+
+
+    /* FUEGOS ARTIFICIALES AL ABRIR */
+    #fireworksCanvas{
+      position:fixed; inset:0; width:100%; height:100%;
+      pointer-events:none; z-index:100; opacity:0; visibility:hidden;
+      background:rgba(26,17,11,0);
+      transition:opacity .08s ease, background-color .08s ease, visibility 0s linear .08s;
+    }
+    #fireworksCanvas.active{
+      opacity:1; visibility:visible;
+      background:rgba(26,17,11,.62);
+      transition:opacity .08s ease, background-color .08s ease, visibility 0s;
+    }
+
+    /* PORTADA */
+    .cover{
+      min-height:100svh;
+      display:grid;
+      place-items:center;
+      padding:34px 24px;
+      position:relative;
+      isolation:isolate;
+      background:
+        radial-gradient(circle at 50% 34%, rgba(255,255,255,.65), transparent 34%),
+        linear-gradient(180deg,#f8f4ee 0%,#f0e6da 100%);
+      transition:opacity .08s ease;
+    }
+
+    .cover-card{text-align:center;max-width:360px;position:relative;z-index:2}
+    .cover-kicker{
+      text-transform:uppercase;
+      letter-spacing:.22em;
+      font-size:.72rem;
+      margin:0 0 24px;
+      opacity:.75;
+    }
+    .cover h1{
+      font-family:"Cormorant Garamond",serif;
+      font-weight:500;
+      font-size:clamp(3rem,12vw,4.8rem);
+      line-height:.88;
+      margin:0;
+      letter-spacing:-.045em;
+    }
+    .cover .ornament{
+      font-family:"Cormorant Garamond",serif;
+      font-size:2rem;
+      margin:18px 0 12px;
+    }
+    .cover-date{
+      font-family:"Cormorant Garamond",serif;
+      font-size:1.45rem;
+      margin:0 0 18px;
+    }
+    .cover-invite{
+      font-family:"Cormorant Garamond",serif;
+      font-size:1.24rem;
+      margin:0 0 28px;
+      font-style:italic;
+    }
+    .open-btn{
+      border:1px solid var(--accent);
+      color:var(--white);
+      background:var(--accent);
+      padding:13px 34px;
+      border-radius:999px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-size:.78rem;
+      box-shadow:0 10px 25px rgba(92,66,45,.2);
+      transition:.25s ease;
+      position:relative;
+      z-index:3;
+      -webkit-appearance:none;
+      appearance:none;
+      touch-action:manipulation;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .open-btn:active{transform:scale(.97)}
+    @media (hover:hover){
+      .open-btn:hover{transform:translateY(-2px);filter:brightness(1.05)}
+    }
+    .cover.is-closing{display:none !important;}
+
+
+    /* FLORES DECORATIVAS PROPIAS - SVG INLINE */
+    .cover-floral{
+      position:absolute;
+      width:175px;
+      height:255px;
+      pointer-events:none;
+      z-index:2;
+      opacity:.86;
+      overflow:visible;
+    }
+    .cover-floral.tl{
+      top:4px;
+      left:0;
+    }
+    .cover-floral.br{
+      right:0;
+      bottom:0;
+      transform:rotate(180deg);
+    }
+    .cover-floral svg{
+      width:100%;
+      height:100%;
+      overflow:visible;
+    }
+    .fl-stem{
+      fill:none;
+      stroke:#8d7765;
+      stroke-width:1.45;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+    .fl-stem-light{
+      fill:none;
+      stroke:#b59d87;
+      stroke-width:1.05;
+      stroke-linecap:round;
+    }
+    .fl-leaf{
+      fill:#a9927d;
+      opacity:.78;
+    }
+    .fl-leaf-light{
+      fill:#c6b19b;
+      opacity:.72;
+    }
+    .fl-flower{
+      fill:#e5d5c2;
+      stroke:#a58b74;
+      stroke-width:.75;
+    }
+    .fl-center{
+      fill:#9a7d62;
+    }
+    .fl-bud{
+      fill:#c4a98e;
+    }
+
+    .section-icon{
+      width:76px;
+      height:76px;
+      margin:0 auto 22px;
+      border-radius:50%;
+      background:#746257;
+      display:grid;
+      place-items:center;
+      box-shadow:0 9px 22px rgba(83,61,47,.16);
+      position:relative;
+    }
+    .section-icon::after{
+      content:"";
+      position:absolute;
+      inset:5px;
+      border:1px solid rgba(255,248,238,.32);
+      border-radius:50%;
+    }
+    .section-icon svg{
+      width:43px;
+      height:43px;
+      fill:none;
+      stroke:#fffaf1;
+      stroke-width:1.55;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      position:relative;
+      z-index:1;
+    }
+    .section-icon .filled{
+      fill:#fffaf1;
+      stroke:none;
+    }
+
+    .quote-icon{margin-top:30px;margin-bottom:20px}
+
+    .gallery-intro-icon{margin-top:6px}
+
+    .timeline li{
+      grid-template-columns:62px 1fr;
+      align-items:center;
+    }
+    .timeline .timeline-icon{
+      width:54px;
+      height:54px;
+      margin:0;
+    }
+    .timeline .timeline-icon svg{width:31px;height:31px}
+    .timeline-content{display:flex;flex-direction:column;gap:4px}
+    .timeline-content time{font-size:1.3rem}
+    .timeline-content span{font-size:.78rem}
+
+    @media (max-width:420px){
+      .cover-flower{width:125px;height:205px}
+      .cover-flower.tl{left:-38px}
+      .cover-flower.tr{right:-42px}
+      .cover-flower.bl{left:-46px}
+      .cover-flower.br{right:-44px}
+      .section-icon{width:72px;height:72px}
+    }
+
+    /* INVITACIÓN */
+    main{display:none}
+    main.is-open{display:block;animation:fadeIn .08s ease both}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+    .section{
+      padding:64px 30px;
+      position:relative;
+      text-align:center;
+    }
+    .section.alt{background:var(--paper-2)}
+    .eyebrow{
+      font-size:.72rem;
+      letter-spacing:.2em;
+      text-transform:uppercase;
+      margin:0 0 10px;
+    }
+    h2,h3,.serif{
+      font-family:"Cormorant Garamond",serif;
+      font-weight:500;
+    }
+    h2{
+      font-size:2.2rem;
+      line-height:1;
+      margin:0 0 22px;
+    }
+    .hero{
+      padding:72px 24px 34px;
+      background:linear-gradient(180deg,#f8f4ee 0%,#f0e5d8 100%);
+    }
+    .hero .small-title{
+      text-transform:uppercase;
+      letter-spacing:.25em;
+      font-size:.78rem;
+      margin-bottom:18px;
+    }
+    .hero h1{
+      font-family:"Cormorant Garamond",serif;
+      font-weight:500;
+      font-size:4.1rem;
+      line-height:.86;
+      margin:0;
+    }
+    .hero-photo{
+      margin:32px auto 0;
+      width:88%;
+      aspect-ratio:3/5;
+      border-radius:180px 180px 18px 18px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    .hero-photo img{width:100%;height:100%;object-fit:cover;object-position:center 46%}
+
+    .quote p{
+      font-family:"Cormorant Garamond",serif;
+      font-size:1.28rem;
+      line-height:1.55;
+      margin:0;
+    }
+    .names{
+      margin-top:34px;
+      display:grid;
+      gap:4px;
+    }
+    .names strong{
+      font-family:"Cormorant Garamond",serif;
+      font-weight:500;
+      font-size:2rem;
+    }
+    .amp{font-family:"Cormorant Garamond",serif;font-size:1.7rem}
+
+    .event-card{
+      margin-top:30px;
+      border:1px solid var(--line);
+      padding:28px 18px;
+      background:rgba(255,255,255,.25);
+    }
+    .event-card .time{
+      font-family:"Cormorant Garamond",serif;
+      font-size:2.8rem;
+      margin:8px 0 18px;
+    }
+    .date-grid{
+      display:grid;
+      grid-template-columns:1fr auto 1fr;
+      align-items:center;
+      gap:12px;
+      max-width:330px;
+      margin:0 auto;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-size:.72rem;
+    }
+    .date-grid .day{
+      font-family:"Cormorant Garamond",serif;
+      font-size:3rem;
+      line-height:1;
+      border-left:1px solid var(--line);
+      border-right:1px solid var(--line);
+      padding:0 18px;
+    }
+    .year{margin-top:12px;letter-spacing:.2em;font-size:.72rem}
+
+    .gallery-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:26px;
+    }
+    .gallery-grid button{
+      border:0;
+      padding:0;
+      background:none;
+      overflow:hidden;
+      border-radius:2px;
+    }
+    .gallery-grid img{
+      width:100%;
+      aspect-ratio:3/4;
+      object-fit:cover;
+      transition:transform .35s ease;
+    }
+    .gallery-grid button:hover img{transform:scale(1.035)}
+
+    .countdown{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:7px;
+      margin:24px 0 32px;
+    }
+    .countdown .box{
+      border:1px solid var(--line);
+      padding:13px 3px;
+      background:rgba(255,255,255,.32);
+    }
+    .countdown strong{
+      display:block;
+      font-family:"Cormorant Garamond",serif;
+      font-size:2rem;
+      font-weight:500;
+      line-height:1;
+    }
+    .countdown span{
+      display:block;
+      font-size:.56rem;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      margin-top:7px;
+    }
+
+    .calendar{
+      border:1px solid var(--line);
+      padding:18px;
+      background:rgba(255,255,255,.24);
+      margin:0 auto 26px;
+    }
+    .calendar-title{
+      font-family:"Cormorant Garamond",serif;
+      font-size:1.45rem;
+      margin-bottom:14px;
+    }
+    .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;font-size:.72rem}
+    .cal-grid b{font-weight:500;padding:5px 0}
+    .cal-grid span{padding:7px 0;border-radius:50%}
+    .cal-grid .muted{opacity:.25}
+    .cal-grid .wedding-day{background:var(--accent);color:#fff}
+
+    .action{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      text-decoration:none;
+      border:1px solid var(--accent);
+      color:var(--accent);
+      padding:12px 18px;
+      text-transform:uppercase;
+      letter-spacing:.13em;
+      font-size:.66rem;
+      transition:.2s ease;
+      background:transparent;
+    }
+    .action:hover{background:var(--accent);color:#fff}
+    .action.primary{background:var(--accent);color:#fff}
+    .action.primary:hover{filter:brightness(1.05)}
+
+    .rsvp-wrap{display:flex;justify-content:center;margin-top:16px}
+
+    .venue{
+      border-top:1px solid var(--line);
+      border-bottom:1px solid var(--line);
+      padding:28px 0;
+      margin-top:28px;
+    }
+    .venue h3{font-size:1.7rem;margin:0 0 10px}
+    .venue p{margin:0;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;line-height:1.6}
+
+    .timeline{
+      list-style:none;
+      padding:0;
+      margin:28px auto 0;
+      max-width:320px;
+      text-align:left;
+    }
+    .timeline li{
+      display:grid;
+      grid-template-columns:76px 1fr;
+      gap:14px;
+      padding:15px 0;
+      border-bottom:1px solid var(--line);
+    }
+    .timeline time{
+      font-family:"Cormorant Garamond",serif;
+      font-size:1.4rem;
+    }
+    .timeline span{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;align-self:center}
+
+    footer{
+      padding:54px 28px 70px;
+      text-align:center;
+      background:#e7dccf;
+    }
+    footer p{
+      font-family:"Cormorant Garamond",serif;
+      font-size:1.1rem;
+      line-height:1.55;
+      max-width:390px;
+      margin:0 auto;
+    }
+    footer small{display:block;margin-top:30px;opacity:.6}
+
+    /* LIGHTBOX */
+    .lightbox{
+      position:fixed;
+      inset:0;
+      background:rgba(15,12,10,.94);
+      z-index:50;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:40px 14px 84px;
+    }
+    .lightbox.open{display:flex}
+    .lightbox-inner{width:min(100%,700px);position:relative}
+    .lightbox img{
+      width:100%;
+      max-height:76vh;
+      object-fit:contain;
+    }
+    .lb-close,.lb-prev,.lb-next{
+      position:absolute;
+      border:0;
+      background:rgba(255,255,255,.12);
+      color:#fff;
+      width:42px;height:42px;border-radius:50%;
+      font-size:1.5rem;
+    }
+    .lb-close{right:0;top:-52px}
+    .lb-prev{left:8px;top:50%;transform:translateY(-50%)}
+    .lb-next{right:8px;top:50%;transform:translateY(-50%)}
+    .lb-count{color:#fff;text-align:center;margin-top:12px;font-size:.8rem}
+    .thumbs{
+      display:flex;
+      gap:8px;
+      justify-content:center;
+      margin-top:10px;
+    }
+    .thumbs button{
+      border:1px solid transparent;
+      padding:0;
+      background:none;
+      opacity:.55;
+    }
+    .thumbs button.active{opacity:1;border-color:#fff}
+    .thumbs img{width:52px;height:52px;object-fit:cover}
+
+    @media (max-width:420px){
+      .section{padding-left:22px;padding-right:22px}
+      .hero h1{font-size:3.45rem}
+    }
+  </style>
+</head>
+<body>
+<canvas id="fireworksCanvas" aria-hidden="true"></canvas>
+<div class="page">
+  <section class="cover" id="cover" aria-label="Portada de invitación">
+    <!-- Ilustración floral propia: esquina superior izquierda -->
+    <div class="cover-floral tl" aria-hidden="true">
+      <svg viewBox="0 0 175 255" role="presentation">
+        <!-- tallos -->
+        <path class="fl-stem" d="M4 250 C20 202,24 151,47 107 C63 76,82 48,112 20"/>
+        <path class="fl-stem" d="M15 218 C28 181,55 151,73 122 C88 98,94 72,96 43"/>
+        <path class="fl-stem-light" d="M30 177 C47 158,64 145,82 131"/>
+        <path class="fl-stem-light" d="M44 140 C53 119,65 101,80 83"/>
+        <path class="fl-stem-light" d="M60 105 C70 88,81 72,94 58"/>
+        <!-- hojas -->
+        <path class="fl-leaf" d="M29 189 C15 181,12 170,14 161 C26 163,34 173,29 189Z"/>
+        <path class="fl-leaf-light" d="M39 166 C29 154,31 143,37 136 C47 142,49 153,39 166Z"/>
+        <path class="fl-leaf" d="M49 143 C59 130,69 130,77 134 C71 144,61 149,49 143Z"/>
+        <path class="fl-leaf-light" d="M57 119 C47 108,48 98,53 91 C63 97,66 108,57 119Z"/>
+        <path class="fl-leaf" d="M68 99 C78 87,89 87,96 92 C90 101,80 105,68 99Z"/>
+        <path class="fl-leaf-light" d="M80 75 C72 64,74 54,80 48 C89 55,90 65,80 75Z"/>
+        <path class="fl-leaf" d="M91 55 C101 44,112 45,118 51 C111 59,101 62,91 55Z"/>
+        <!-- flores -->
+        <g transform="translate(108 20)">
+          <ellipse class="fl-flower" cx="0" cy="-7" rx="5" ry="9"/>
+          <ellipse class="fl-flower" cx="7" cy="-2" rx="9" ry="5"/>
+          <ellipse class="fl-flower" cx="4" cy="7" rx="7" ry="6"/>
+          <ellipse class="fl-flower" cx="-5" cy="7" rx="7" ry="6"/>
+          <ellipse class="fl-flower" cx="-8" cy="-2" rx="8" ry="5"/>
+          <circle class="fl-center" cx="0" cy="0" r="3"/>
+        </g>
+        <g transform="translate(78 82) scale(.72)">
+          <ellipse class="fl-flower" cx="0" cy="-7" rx="5" ry="9"/>
+          <ellipse class="fl-flower" cx="7" cy="-2" rx="9" ry="5"/>
+          <ellipse class="fl-flower" cx="4" cy="7" rx="7" ry="6"/>
+          <ellipse class="fl-flower" cx="-5" cy="7" rx="7" ry="6"/>
+          <ellipse class="fl-flower" cx="-8" cy="-2" rx="8" ry="5"/>
+          <circle class="fl-center" cx="0" cy="0" r="3"/>
+        </g>
+        <!-- ramitas pequeñas -->
+        <circle class="fl-bud" cx="37" cy="121" r="3"/>
+        <circle class="fl-bud" cx="51" cy="96" r="3"/>
+        <circle class="fl-bud" cx="65" cy="72" r="2.6"/>
+        <circle class="fl-bud" cx="24" cy="198" r="2.5"/>
+        <circle class="fl-bud" cx="91" cy="38" r="2.5"/>
+      </svg>
+    </div>
+
+    <!-- Ilustración floral propia: esquina inferior derecha -->
+    <div class="cover-floral br" aria-hidden="true">
+      <svg viewBox="0 0 175 255" role="presentation">
+        <path class="fl-stem" d="M4 250 C20 202,24 151,47 107 C63 76,82 48,112 20"/>
+        <path class="fl-stem" d="M15 218 C28 181,55 151,73 122 C88 98,94 72,96 43"/>
+        <path class="fl-stem-light" d="M30 177 C47 158,64 145,82 131"/>
+        <path class="fl-stem-light" d="M44 140 C53 119,65 101,80 83"/>
+        <path class="fl-stem-light" d="M60 105 C70 88,81 72,94 58"/>
+        <path class="fl-leaf" d="M29 189 C15 181,12 170,14 161 C26 163,34 173,29 189Z"/>
+        <path class="fl-leaf-light" d="M39 166 C29 154,31 143,37 136 C47 142,49 153,39 166Z"/>
+        <path class="fl-leaf" d="M49 143 C59 130,69 130,77 134 C71 144,61 149,49 143Z"/>
+        <path class="fl-leaf-light" d="M57 119 C47 108,48 98,53 91 C63 97,66 108,57 119Z"/>
+        <path class="fl-leaf" d="M68 99 C78 87,89 87,96 92 C90 101,80 105,68 99Z"/>
+        <path class="fl-leaf-light" d="M80 75 C72 64,74 54,80 48 C89 55,90 65,80 75Z"/>
+        <path class="fl-leaf" d="M91 55 C101 44,112 45,118 51 C111 59,101 62,91 55Z"/>
+        <g transform="translate(108 20)">
+          <ellipse class="fl-flower" cx="0" cy="-7" rx="5" ry="9"/>
+          <ellipse class="fl-flower" cx="7" cy="-2" rx="9" ry="5"/>
+          <ellipse class="fl-flower" cx="4" cy="7" rx="7" ry="6"/>
+          <ellipse class="fl-flower" cx="-5" cy="7" rx="7" ry="6"/>
+          <ellipse class="fl-flower" cx="-8" cy="-2" rx="8" ry="5"/>
+          <circle class="fl-center" cx="0" cy="0" r="3"/>
+        </g>
+        <g transform="translate(78 82) scale(.72)">
+          <ellipse class="fl-flower" cx="0" cy="-7" rx="5" ry="9"/>
+          <ellipse class="fl-flower" cx="7" cy="-2" rx="9" ry="5"/>
+          <ellipse class="fl-flower" cx="4" cy="7" rx="7" ry="6"/>
+          <ellipse class="fl-flower" cx="-5" cy="7" rx="7" ry="6"/>
+          <ellipse class="fl-flower" cx="-8" cy="-2" rx="8" ry="5"/>
+          <circle class="fl-center" cx="0" cy="0" r="3"/>
+        </g>
+        <circle class="fl-bud" cx="37" cy="121" r="3"/>
+        <circle class="fl-bud" cx="51" cy="96" r="3"/>
+        <circle class="fl-bud" cx="65" cy="72" r="2.6"/>
+        <circle class="fl-bud" cx="24" cy="198" r="2.5"/>
+        <circle class="fl-bud" cx="91" cy="38" r="2.5"/>
+      </svg>
+    </div>
+    <div class="cover-card">
+      <p class="cover-kicker">Nuestra boda</p>
+      <h1>DANIELA<br>&amp;VALENTÍN</h1>
+      <div class="ornament">♡</div>
+      <p class="cover-date">21 de noviembre de 2026</p>
+      <p class="cover-invite">Les Invitamos Cordialmente</p>
+      <button class="open-btn" id="openInvitation">Abrir</button>
+    </div>
+  </section>
+
+  <main id="invitation">
+    <section class="hero section">
+      <div class="small-title">¡Nos casamos!</div>
+      <h1>Daniela<br>&amp;Valentín</h1>
+      <div class="hero-photo">
+        <img src="https://cdn.chungdoi.com/uploads/40be272f-679a-417b-9913-ed049a6064f9.jpg" alt="Daniela y Valentín">
+      </div>
+    </section>    
+
+    <section class="section quote">
+      <div class="section-icon quote-icon" aria-label="Anillos de boda">
+        <svg viewBox="0 0 48 48" role="img">
+          <circle cx="19" cy="27" r="9.5"></circle>
+          <circle cx="29" cy="21" r="9.5"></circle>
+          <path d="M12.5 19.5l4.2-5.2 4.8 2.1"></path>
+          <path d="M23.5 13.5l4.8-2.8 4.4 4.4"></path>
+        </svg>
+      </div>
+
+      <div class="names">
+        <strong>Daniela Bravo Isais</strong>
+        <div class="amp">&amp;</div>
+        <strong>Valentín Alvarado Avitia</strong>
+      </div>
+      <br>
+      <br>
+
+      <p class="eyebrow">El amor nos une y tu presencia nos alegra</p>
+
+      <div style="margin: 18px 0 24px; text-align: center; line-height: 0;">
+        <svg viewBox="0 0 200 24" style="width: 160px; height: 20px; fill: none; stroke: var(--accent); stroke-width: 1.2; stroke-linecap: round;" role="presentation">
+          <!-- Línea y espiral izquierda -->
+          <path d="M 10 12 L 65 12 C 72 12, 75 8, 72 5 C 69 2, 65 6, 68 10 C 70 12, 75 12, 82 12" />
+          <!-- Línea y espiral derecha -->
+          <path d="M 190 12 L 135 12 C 128 12, 125 8, 128 5 C 131 2, 135 6, 132 10 C 130 12, 125 12, 118 12" />
+          <!-- Corazón central -->
+          <path d="M 100 16 C 94 10, 93 6, 100 2 C 107 6, 106 10, 100 16 Z" fill="var(--accent)" stroke="none" />
+          <!-- Puntos de acento -->
+          <circle cx="20" cy="12" r="1.5" fill="var(--accent)" stroke="none" />
+          <circle cx="180" cy="12" r="1.5" fill="var(--accent)" stroke="none" />
+        </svg>
+      </div>
+
+      <p class="eyebrow" style="text-transform:none; font-size:1.5rem; letter-spacing:0.05em; margin-bottom:20px;">
+        Con la bendición de Dios y de nuestros padres:
+      </p>
+
+      <ul class="timeline" style="margin-top:10px; margin-bottom:28px;">
+        <li>
+          <div class="section-icon timeline-icon" aria-label="Padres de la novia">
+            <svg viewBox="0 0 100 100" role="img">
+              <!-- Novia (Tiara, Velo, Cabello y Escote) -->
+              <path class="filled" d="M22,85 C21,68 31,48 42,32 C47,25 53,25 58,32 C69,48 79,68 78,85 Z" opacity="0.45"/>
+              <path class="filled" fill-rule="evenodd" d="M50,26 C36,26 27,37 27,51 C27,62 33,70 50,70 C67,70 73,62 73,51 C73,37 64,26 50,26 Z M50,33 C42,33 34,40 34,48 C41,43 59,43 66,48 C66,40 58,33 50,33 Z"/>
+              <path class="filled" d="M50,20 C42,20 37,23 37,26 C41,25 45,23 50,23 C55,23 59,25 63,26 C63,23 58,20 50,20 Z"/>
+              <circle cx="50" cy="18" r="2.5" class="filled"/>
+              <circle cx="43" cy="20" r="2" class="filled"/>
+              <circle cx="57" cy="20" r="2" class="filled"/>
+              <circle cx="37" cy="23" r="1.5" class="filled"/>
+              <circle cx="63" cy="23" r="1.5" class="filled"/>
+              <path class="filled" d="M30,85 C30,73 40,68 50,74 C60,68 70,73 70,85 Z"/>
+            </svg>
+          </div>
+          <div class="timeline-content" style="text-align:right;">
+            <span style="font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:500; text-transform:none; line-height:1.2;">Gerardo Bravo Ontiveros</span>
+            <span style="font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:500; text-transform:none; line-height:1.2;">Claudia M. Isais Herrera</span>
+          </div>
+        </li>
+        <li>
+          <div class="section-icon timeline-icon" aria-label="Padres del novio">
+            <svg viewBox="0 0 100 100" role="img">
+              <!-- Novio (Sombrero de Copa, Cabeza, Saco y Corbata) -->
+              <path class="filled" d="M33,40 L67,40 L67,45 L33,45 Z M39,21 L61,21 L61,40 L39,40 Z"/>
+              <circle cx="50" cy="54" r="13" class="filled"/>
+              <path class="filled" d="M25,85 C25,70 36,63 46,63 L54,63 C64,63 75,70 75,85 Z"/>
+              <path d="M50,63 L44,77 L50,85 L56,77 Z" fill="#746257"/>
+              <path class="filled" d="M47,63 L50,69 L53,63 L50,65 Z"/>
+              <path class="filled" d="M48,69 L52,69 L51,80 L49,80 Z"/>
+            </svg>
+          </div>
+          <div class="timeline-content" style="text-align:right;">
+            <span style="font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:500; text-transform:none; line-height:1.2;">Félix Alvarado Villarreal</span>
+            <span style="font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:500; text-transform:none; line-height:1.2;">Tomasa Avitia Villa</span>
+          </div>
+        </li>
+      </ul>
+
+      <p>Queremos que seas parte del momento en que nos prometemos un para siempre.</p>      
+
+      <div class="event-card">
+        <p class="eyebrow">Ceremonia religiosa en el Templo de Santa Ana</p>
+        <div style="font-size:.72rem;letter-spacing:.16em;text-transform:uppercase">A las</div>
+        <div class="time">18:00 Hrs.</div>
+        <div class="date-grid">
+          <span>Sábado</span>
+          <span class="day">21</span>
+          <span>Noviembre</span>
+        </div>
+        <div class="year">2026</div>
+      </div>
+      <div class="names">
+        <section class="section">
+      <p class="eyebrow">¡Queremos compartir con las personas mas importantes para nosotros este momento tan especial!</p>
+      <br>
+      <p>Acompáñennos a celebrar una cena en restaurante LUGANO</p>     
+      <br> 
+       <h2>A partir de las 19:00 Hrs</h2>   
+       <br>   
+        <a class="serif" href="https://maps.app.goo.gl/c2Bhq3hQtyyDom9DA" target="_blank" rel="noopener" style="font-size:1.5rem; color: inherit; text-decoration: underline;">Mostrar dirección</a> 
+    </section>
+      </div>
+    </section>
+
+    <section class="section alt">
+      <p class="eyebrow">Nuestros recuerdos</p>
+      <div class="section-icon gallery-intro-icon" aria-label="Fotografías">
+        <svg viewBox="0 0 48 48" role="img">
+          <rect x="9" y="13" width="25" height="23" rx="2"></rect>
+          <rect x="15" y="9" width="24" height="23" rx="2"></rect>
+          <circle cx="31" cy="15" r="2.2"></circle>
+          <path d="M17 28l6-6 4.5 4 3.5-3.5 6 6"></path>
+        </svg>
+      </div>
+      <h2>Galería de Fotos</h2>
+
+      <div class="gallery-grid" id="gallery">
+        <button data-index="0" aria-label="Abrir foto 1"><img src="https://cdn.chungdoi.com/uploads/b156df22-ac6d-46d5-9c00-17f1be62836e.jpg" alt="Foto 1"></button>
+        <button data-index="1" aria-label="Abrir foto 2"><img src="https://cdn.chungdoi.com/uploads/a727d650-f5a1-4624-96c8-f22e6de30187.jpg" alt="Foto 2"></button>
+        <button data-index="2" aria-label="Abrir foto 3"><img src="https://cdn.chungdoi.com/uploads/4c6435be-519d-48eb-bc2c-5870b0d18360.jpg" alt="Foto 3"></button>
+        <button data-index="3" aria-label="Abrir foto 4"><img src="https://cdn.chungdoi.com/uploads/e6bd3508-97c4-4f62-bbd6-4ec03a51e2f4.jpg" alt="Foto 4"></button>
+      </div>
+    </section>
+      
+    <section class="section">
+      <p class="eyebrow">Cuenta regresiva</p>
+      <div class="section-icon" aria-label="Calendario">
+        <svg viewBox="0 0 48 48" role="img">
+          <rect x="8" y="11" width="32" height="29" rx="3"></rect>
+          <path d="M14 8v7M34 8v7M8 19h32"></path>
+          <path d="M15 25h4M22 25h4M29 25h4M15 32h4M22 32h4M29 32h4"></path>
+        </svg>
+      </div>
+      <h2>Falta muy poco</h2>
+      <div class="countdown" id="countdown">
+        <div class="box"><strong id="days">--</strong><span>Días</span></div>
+        <div class="box"><strong id="hours">--</strong><span>Horas</span></div>
+        <div class="box"><strong id="minutes">--</strong><span>Min</span></div>
+        <div class="box"><strong id="seconds">--</strong><span>Seg</span></div>
+      </div>
+
+      <div class="calendar">
+        <div class="calendar-title">Noviembre 2026</div>
+        <div class="cal-grid" id="calendarGrid"></div>
+      </div>
+
+      <a class="action" id="calendarLink" target="_blank" rel="noopener">Añadir al Calendario</a>
+      <div class="rsvp-wrap">        
+        <a class="action" id="rsvpLink" style="cursor: pointer;">Confirmar Asistencia</a>      
+      </div>
+
+      <div class="venue">
+        <div class="section-icon" aria-label="Cámara fotográfica">
+          <svg viewBox="0 0 48 48" role="img">
+            <path d="M8 17h8l3-5h10l3 5h8a2 2 0 0 1 2 2v19a3 3 0 0 1-3 3H11a3 3 0 0 1-3-3V19a2 2 0 0 1 2-2z"></path>
+            <circle cx="24" cy="28" r="7"></circle>
+            <circle cx="36" cy="22" r="1.5" class="filled"></circle>
+          </svg>
+        </div>
+        <h2 class="eyebrow" style="font-size:1.4rem"><strong>¡AYÚDANOS A CAPTURAR CADA MOMENTO!</strong></h2>
+        <br>
+        <h3>Agradecemos muchísimo que tomen todas las fotitos posibles durante el evento y nos las compartan en el siguiente enlace:</h3>
+        <br>
+        <a class="action primary" href="https://photos.app.goo.gl/PMzUxw5ENsNF8XUz8" target="_blank" rel="noopener">Compartir fotos</a>
+      </div>
+    </section>
+
+    <section class="section alt">
+      <p class="eyebrow"></p>
+      <h2>Programa del día</h2>
+      <ol class="timeline">
+        <li>
+          <div class="section-icon timeline-icon" aria-label="Iglesia">
+            <svg viewBox="0 0 48 48" role="img">
+              <path d="M9 39h30"></path>
+              <path d="M12 39V22l12-8 12 8v17"></path>
+              <path d="M24 10v-6"></path>
+              <path d="M20 7h8"></path>
+              <path d="M20 39V29h8v10"></path>
+              <path d="M17 23h4M27 23h4"></path>
+            </svg>
+          </div>
+          <div class="timeline-content">
+            <time>18:00 Hrs.</time>
+            <span>Ceremonia religiosa</span>
+          </div>
+        </li>
+        <li>
+          <div class="section-icon timeline-icon" aria-label="Celebración con comida">
+            <svg viewBox="0 0 48 48" role="img">
+              <ellipse cx="24" cy="31" rx="16" ry="6"></ellipse>
+              <path d="M11 31c2-9 8-14 13-14s11 5 13 14"></path>
+              <path d="M17 24c2-3 4-4 7-4"></path>
+              <path d="M28 21c2 1 4 3 5 5"></path>
+              <path d="M15 28c2-2 4-3 6-3"></path>
+            </svg>
+          </div>
+          <div class="timeline-content">
+            <time>21:30 Hrs.</time>
+            <span>Celebración</span>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <footer>
+      <p>Su presencia es el mejor regalo al que podemos aspirar. Si desean brindarnos un detalle, agradeceremos profundamente que sea en efectivo a través del buzón de sobres disponible en el evento.</p>
+      <small>♡ Daniela &amp; Valentín</small>
+    </footer>
+  </main>
+</div>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lightbox-inner">
+    <button class="lb-close" id="lbClose" aria-label="Cerrar">×</button>
+    <button class="lb-prev" id="lbPrev" aria-label="Anterior">‹</button>
+    <img id="lbImage" alt="Foto ampliada">
+    <button class="lb-next" id="lbNext" aria-label="Siguiente">›</button>
+    <div class="lb-count" id="lbCount"></div>
+    <div class="thumbs" id="thumbs"></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const cover = document.getElementById('cover');
+  const invitation = document.getElementById('invitation');
+  const openBtn = document.getElementById('openInvitation');
+
+  // Fuegos artificiales ultra ultrarrápidos (champán, oro rosado y marfil)
+  const fireworksCanvas = document.getElementById('fireworksCanvas');
+  const fwCtx = fireworksCanvas.getContext('2d');
+  let fwAnimation = null, fwParticles = [], fwRockets = [], fwTimers = [];
+  let fwStart = 0, fwLast = 0, W = window.innerWidth, H = window.innerHeight;
+  const isSmall = window.innerWidth < 600;
+
+  function resizeFireworksCanvas(){
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    fireworksCanvas.width = W * dpr;
+    fireworksCanvas.height = H * dpr;
+    fwCtx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  resizeFireworksCanvas();
+  window.addEventListener('resize', resizeFireworksCanvas);
+
+  const random = (min,max) => Math.random()*(max-min)+min;
+
+  const palettes = [
+    ['#f7e6bd','#e9cb8a','#fff7e3'],   // champán
+    ['#f6dccd','#e8bca6','#fff1e8'],   // oro rosado
+    ['#fffaf0','#f1e3c8','#d8b878']    // marfil y oro
+  ];
+  const gold = ['#f3d999','#e6bf72','#fff2cf'];
+  const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+
+  function launchRocket(xRatio, yRatio, type){
+    fwRockets.push({
+      x: W*xRatio, y: H+6,
+      targetY: H*yRatio,
+      vy: random(18,22),
+      sway: random(-.1,.1),
+      trail: [], type
+    });
+  }
+
+  function explode(x, y, type){
+    const palette = type === 'willow' ? gold : pick(palettes);
+    if(type === 'willow'){
+      const n = isSmall ? 40 : 56;
+      for(let i=0;i<n;i++){
+        const angle = (i/n)*Math.PI*2 + random(-.08,.08);
+        const speed = random(2.5,5.5);
+        fwParticles.push({
+          x, y, vx:Math.cos(angle)*speed, vy:Math.sin(angle)*speed,
+          gravity:.06, friction:.94, alpha:1, decay:random(.02,.03),
+          size:random(1,1.6), color:pick(palette), trailLen:8, twinkle:true, trail:[]
+        });
+      }
+    }else{
+      const n = isSmall ? 40 : 56;
+      for(let i=0;i<n;i++){
+        const angle = (i/n)*Math.PI*2 + random(-.04,.04);
+        const speed = random(4.5,6.5);
+        fwParticles.push({
+          x, y, vx:Math.cos(angle)*speed, vy:Math.sin(angle)*speed,
+          gravity:.04, friction:.93, alpha:1, decay:random(.025,.035),
+          size:random(1.3,1.9), color:pick(palette), trailLen:4, twinkle:false, trail:[]
+        });
+      }
+      const m = isSmall ? 12 : 20;
+      for(let i=0;i<m;i++){
+        const angle = (i/m)*Math.PI*2 + .2;
+        const speed = random(2.5,3.5);
+        fwParticles.push({
+          x, y, vx:Math.cos(angle)*speed, vy:Math.sin(angle)*speed,
+          gravity:.03, friction:.92, alpha:1, decay:random(.03,.04),
+          size:1.2, color:palette[2], trailLen:3, twinkle:false, trail:[]
+        });
+      }
+    }
+  }
+
+  function drawTrail(points, color, size, alpha){
+    fwCtx.strokeStyle = color;
+    fwCtx.lineCap = 'round';
+    for(let j=1;j<points.length;j++){
+      fwCtx.globalAlpha = alpha * (j/points.length) * .55;
+      fwCtx.lineWidth = size * (j/points.length);
+      fwCtx.beginPath();
+      fwCtx.moveTo(points[j-1][0], points[j-1][1]);
+      fwCtx.lineTo(points[j][0], points[j][1]);
+      fwCtx.stroke();
+    }
+  }
+
+  function animateFireworks(ts){
+    if(!fwStart){ fwStart = ts; fwLast = ts; }
+    const elapsed = ts - fwStart;
+    const k = Math.min((ts - fwLast)/16.667, 2.5) || 1;
+    fwLast = ts;
+
+    fwCtx.clearRect(0,0,W,H);
+    fwCtx.globalCompositeOperation = 'lighter';
+
+    for(let i=fwRockets.length-1;i>=0;i--){
+      const r = fwRockets[i];
+      r.trail.push([r.x,r.y]); if(r.trail.length>6) r.trail.shift();
+      r.y -= r.vy*k; r.x += r.sway*k; r.vy *= Math.pow(.97,k);
+      drawTrail(r.trail,'#f3d999',1.8,1);
+      fwCtx.globalAlpha = .9; fwCtx.fillStyle = '#fff3d6';
+      fwCtx.beginPath(); fwCtx.arc(r.x,r.y,1.5,0,Math.PI*2); fwCtx.fill();
+      if(r.y <= r.targetY || r.vy < 3.2){ explode(r.x,r.y,r.type); fwRockets.splice(i,1); }
+    }
+
+    for(let i=fwParticles.length-1;i>=0;i--){
+      const p = fwParticles[i];
+      p.trail.push([p.x,p.y]); if(p.trail.length>p.trailLen) p.trail.shift();
+      p.vx *= Math.pow(p.friction,k);
+      p.vy = p.vy*Math.pow(p.friction,k) + p.gravity*k;
+      p.x += p.vx*k; p.y += p.vy*k; p.alpha -= p.decay*k;
+      if(p.alpha <= 0){ fwParticles.splice(i,1); continue; }
+      let a = p.alpha;
+      if(p.twinkle && a < .55) a *= (.55 + Math.random()*.45);
+      drawTrail(p.trail, p.color, p.size*1.6, a);
+      fwCtx.fillStyle = p.color;
+      fwCtx.globalAlpha = a*.16;
+      fwCtx.beginPath(); fwCtx.arc(p.x,p.y,p.size*3.2,0,Math.PI*2); fwCtx.fill();
+      fwCtx.globalAlpha = a;
+      fwCtx.beginPath(); fwCtx.arc(p.x,p.y,p.size,0,Math.PI*2); fwCtx.fill();
+    }
+
+    fwCtx.globalCompositeOperation = 'source-over';
+    fwCtx.globalAlpha = 1;
+
+    if(elapsed < 380 || fwRockets.length || fwParticles.length){
+      fwAnimation = requestAnimationFrame(animateFireworks);
+    }else{
+      stopFireworks();
+    }
+  }
+
+  function stopFireworks(){
+    fireworksCanvas.classList.remove('active');
+    setTimeout(() => { if(!fwAnimation) fwCtx.clearRect(0,0,W,H); }, 80);
+    fwStart = 0; fwAnimation = null;
+  }
+
+  function playFireworks(){
+    if(fwAnimation) cancelAnimationFrame(fwAnimation);
+    fwTimers.forEach(clearTimeout); fwTimers = [];
+    fwParticles = []; fwRockets = []; fwStart = 0;
+    resizeFireworksCanvas();
+    fireworksCanvas.classList.add('active');
+    const shows = [
+      [0,   .50, .30, 'peony'],
+      [30,  .24, .40, 'peony'],
+      [60,  .76, .36, 'peony'],
+      [110, .34, .30, 'willow'],
+      [140, .68, .28, 'willow'],
+      [180, .50, .24, 'willow']
+    ];
+    shows.forEach(([t,x,y,type]) => {
+      if(t === 0) launchRocket(x,y,type);
+      else fwTimers.push(setTimeout(() => launchRocket(x,y,type), t));
+    });
+    fwAnimation = requestAnimationFrame(animateFireworks);
+  }
+
+  // Apertura de la invitación (Instantánea sin bloquear interacción).
+  let opened = false;
+
+  function openInvitation(updateUrl = true){
+    if(opened) return;
+    opened = true;
+    
+    // Mostramos inmediatamente la invitación sin delay
+    cover.classList.add('is-closing');
+    invitation.classList.add('is-open');
+    try{ window.scrollTo(0,0); }catch(e){}
+
+    if(updateUrl){
+      try{
+        const url = new URL(location.href);
+        url.searchParams.set('open','1');
+        history.replaceState({},'',url);
+      }catch(e){}
+    }
+
+    // Efecto visual rápido en segundo plano
+    try{ playFireworks(); }catch(e){ console.error(e); }
+  }
+
+  openBtn.addEventListener('click', () => openInvitation(true));
+  openBtn.addEventListener('touchend', e => { e.preventDefault(); openInvitation(true); }, {passive:false});
+
+  if(new URLSearchParams(location.search).get('open') === '1'){
+    opened = true;
+    cover.style.display = 'none';
+    invitation.classList.add('is-open');
+  }
+
+  // Countdown: 21 nov 2026, 18:00, hora local del navegador.
+  const wedding = new Date(2026, 10, 21, 18, 0, 0);
+  function tick(){
+    const diff = Math.max(0, wedding - new Date());
+    const s = Math.floor(diff/1000);
+    document.getElementById('days').textContent = Math.floor(s/86400);
+    document.getElementById('hours').textContent = String(Math.floor((s%86400)/3600)).padStart(2,'0');
+    document.getElementById('minutes').textContent = String(Math.floor((s%3600)/60)).padStart(2,'0');
+    document.getElementById('seconds').textContent = String(s%60).padStart(2,'0');
+  }
+  tick(); setInterval(tick,1000);
+
+  // Calendario de noviembre 2026 (lunes-domingo).
+  const cal = document.getElementById('calendarGrid');
+  ['Lu','Ma','Mi','Ju','Vi','Sá','Do'].forEach(d => {
+    const b=document.createElement('b'); b.textContent=d; cal.appendChild(b);
+  });
+  const first = new Date(2026,10,1);
+  const mondayIndex = (first.getDay()+6)%7;
+  for(let i=0;i<mondayIndex;i++){
+    const span=document.createElement('span'); span.className='muted'; cal.appendChild(span);
+  }
+  for(let d=1; d<=30; d++){
+    const span=document.createElement('span');
+    span.textContent=d;
+    if(d===21) span.className='wedding-day';
+    cal.appendChild(span);
+  }
+
+  // Google Calendar.
+  const start='20261121T180000';
+  const end='20261122T010000';
+  const details=encodeURIComponent('Boda de Daniela & Valentín');
+  const locationText=encodeURIComponent('Hotel Gobernador, Jardín Bugambilias');
+  document.getElementById('calendarLink').href =
+    `https://www.google.com/calendar/render?action=TEMPLATE&text=${details}&dates=${start}/${end}&location=${locationText}`;
+
+  // Galería / lightbox.
+  const photos = [
+    'https://cdn.chungdoi.com/uploads/b156df22-ac6d-46d5-9c00-17f1be62836e.jpg',
+    'https://cdn.chungdoi.com/uploads/a727d650-f5a1-4624-96c8-f22e6de30187.jpg',
+    'https://cdn.chungdoi.com/uploads/4c6435be-519d-48eb-bc2c-5870b0d18360.jpg',
+    'https://cdn.chungdoi.com/uploads/e6bd3508-97c4-4f62-bbd6-4ec03a51e2f4.jpg'
+  ];
+  const lightbox=document.getElementById('lightbox');
+  const lbImage=document.getElementById('lbImage');
+  const lbCount=document.getElementById('lbCount');
+  const thumbs=document.getElementById('thumbs');
+  let index=0;
+
+  photos.forEach((src,i)=>{
+    const b=document.createElement('button');
+    b.innerHTML=`<img src="${src}" alt="Miniatura ${i+1}">`;
+    b.addEventListener('click',()=>show(i));
+    thumbs.appendChild(b);
+  });
+
+  function render(){
+    lbImage.src=photos[index];
+    lbCount.textContent=`${index+1} / ${photos.length}`;
+    [...thumbs.children].forEach((b,i)=>b.classList.toggle('active',i===index));
+  }
+  function show(i){
+    index=(i+photos.length)%photos.length;
+    render();
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  }
+  function close(){
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+  }
+
+document.getElementById('rsvpLink').addEventListener('click', async function(e) {
+  const phone = "526181071171";
+  const mensaje = "Confirmo mi asistencia a la boda de Daniela y Valentín!!!";
+
+  try {
+    await navigator.clipboard.writeText(mensaje);
+  } catch (error) {
+    console.log("No se pudo copiar automáticamente:", error);
+  }  
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(mensaje)}`, '_blank', 'noopener,noreferrer');
+});
+
+  document.querySelectorAll('#gallery button').forEach(btn=>{
+    btn.addEventListener('click',()=>show(Number(btn.dataset.index)));
+  });
+  document.getElementById('lbClose').addEventListener('click',close);
+  document.getElementById('lbPrev').addEventListener('click',()=>show(index-1));
+  document.getElementById('lbNext').addEventListener('click',()=>show(index+1));
+  lightbox.addEventListener('click',e=>{ if(e.target===lightbox) close(); });
+  document.addEventListener('keydown',e=>{
+    if(!lightbox.classList.contains('open')) return;
+    if(e.key==='Escape') close();
+    if(e.key==='ArrowLeft') show(index-1);
+    if(e.key==='ArrowRight') show(index+1);
+  });
+})();
+</script>
+</body>
+</html>
